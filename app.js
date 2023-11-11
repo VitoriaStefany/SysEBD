@@ -4,6 +4,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+// Models
+const User = require('./models/User')
 
 const app = express()
 
@@ -16,15 +18,19 @@ app.get('/', (req, res) => {
 })
 
 // Register User
-app.post('/auth/register', async(req, res) => {
-
+app.post('/auth/register', async (req, res) => {
     const {name, email, password, confirmPassword} = req.body
 
     // validations
     if(!name){
         return res.status(422).json({msg: "O nome é obrigatório! "}) // Requisão entendida pelo servidor, porém os dados estão incorretos!
     }
-
+    if(!email){
+        return res.status(422).json({msg: "O email é obrigatório! "}) // Requisão entendida pelo servidor, porém os dados estão incorretos!
+    }
+    if(!password){
+        return res.status(422).json({msg: "A senha é obrigatório! "}) // Requisão entendida pelo servidor, porém os dados estão incorretos!
+    } 
 })
 
 // Credencials
@@ -33,7 +39,7 @@ const dbPassword = process.env.DB_PASS
 
 mongoose.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.5lmk5ho.mongodb.net/?retryWrites=true&w=majority`)
 .then(() => {
-    app.listen(3030)
+    app.listen(8080)
     console.log("Conectado ao banco!")
 })
 .catch((err) => consolelog(err))
